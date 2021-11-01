@@ -1,13 +1,13 @@
 class UsersController < ApplicationController
 
   def index
-    render json: User.all.to_json(:only => [:id, :username, :email])
+    render json: User.all.to_json(:only => [:id, :username, :email], :methods => [:get_avatar])
   end
 
   def show
     begin
       set_user
-      render json: @user.to_json(:only => [:id, :username, :email])
+      render json: @user.to_json(:only => [:id, :username, :email], :methods => [:get_avatar])
     rescue => exception
       render json: {message: (exception.message)}
     end
@@ -65,7 +65,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:username, :email, :password)
+    params.permit(:username, :email, :avatar, :password)
   end 
   
 end
