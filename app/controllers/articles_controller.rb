@@ -1,7 +1,12 @@
 class ArticlesController < ApplicationController
 
   def index
-    render json: Article.all.to_json(:only => [:id, :title, :description])
+    if params[:user_id]
+      @articles = User.find(params[:user_id]).articles
+    else
+      @articles = Article.all
+    end
+    render json: @articles.to_json(:only => [:id, :title, :description])
   end
 
   def show
