@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :require_login, only: [:update, :show, :destory]
+  before_action :require_same_user, only: [:update, :destroy]
 
   def index
     render json: User.all.to_json(:only => [:id, :username, :email], :methods => [:get_avatar])
@@ -57,7 +60,6 @@ class UsersController < ApplicationController
     end
   end
   
-
   private
 
   def set_user
@@ -67,5 +69,11 @@ class UsersController < ApplicationController
   def user_params
     params.permit(:username, :email, :avatar, :password)
   end 
+
+  def require_same_user
+    if current_user_id != params[:id].to_i
+      render json: { message: "You can only edit or delete your own account"},status: :unprocessable_entity
+    end
+  end
   
 end

@@ -1,3 +1,4 @@
+before_action :require_login, only:[:create,:update,:destroy]
 class ArticlesController < ApplicationController
 
   def index
