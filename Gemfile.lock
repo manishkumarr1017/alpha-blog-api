@@ -151,7 +151,7 @@ PLATFORMS
   arm64-darwin-20
 
 DEPENDENCIES
-  bcrypt
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.4)
   byebug
   dotenv-rails
