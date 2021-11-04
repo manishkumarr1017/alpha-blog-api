@@ -1,5 +1,7 @@
-before_action :require_login, only:[:create,:update,:destroy]
 class ArticlesController < ApplicationController
+  before_action :set_article, only: [:show, :update, :destroy]
+  before_action :require_login, only: [:create, :update, :destory]
+  before_action :require_same_user, only: [:update, :destroy]
 
   def index
     if params[:user_id]
@@ -23,6 +25,7 @@ class ArticlesController < ApplicationController
   def create
     begin
       @article = Article.new(article_params)
+      @article.user_id = current_user_id
       if @article.save
         render json: {message: "Article successfully created"}, status: :created
       else
@@ -72,6 +75,12 @@ class ArticlesController < ApplicationController
 
   def article_params
     params.require(:article).permit(:title, :description)
-  end 
+  end
+
+  def require_same_user
+    if current_user_id != params[:id].to_i
+      render json: { message: "You can only edit or delete your own account"},status: :unprocessable_entity
+    end
+  end
   
 end
