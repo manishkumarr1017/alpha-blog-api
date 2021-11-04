@@ -6,6 +6,8 @@ class ArticlesController < ApplicationController
   def index
     if params[:user_id]
       @articles = User.find(params[:user_id]).articles
+    elsif params[:categories_id]
+      @articles = Category.find(params[:category_id]).articles
     else
       @articles = Article.all
     end
